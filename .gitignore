@@ -1,0 +1,7 @@
+.pio
+.vscode
+lib
+test
+sdkconfig.esp32dev
+platformio.ini
+include/README
