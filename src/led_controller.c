@@ -24,12 +24,12 @@ void ledc_channel_init(ledc_channel_t channel, ledc_timer_t timer, int pin){
     ledc_channel_config(&channel_config);
 }
 
-void ledc_set(ledc_channel_t channel, int duty){
+void ledc_channel_set(ledc_channel_t channel, int duty){
     ledc_set_duty(SPEED_MODE, channel, duty);
     ledc_update_duty(SPEED_MODE, channel);
 }
 
-void ledc_disable(ledc_channel_t channel){
+void ledc_channel_disable(ledc_channel_t channel){
     ledc_set_duty(SPEED_MODE, channel, 0);
     ledc_update_duty(SPEED_MODE, channel);
 }

@@ -1,8 +1,7 @@
-#include"led_controller.h"
 #include"freertos/FreeRTOS.h"
 #include"freertos/task.h"
 #include"driver/uart.h"
-#include"driver/gpio.h"
+#include"rgb.h"
 
 #define PIN_1 GPIO_NUM_17
 #define PIN_2 GPIO_NUM_16
@@ -17,16 +16,29 @@
 #define BLUE_PIN_0 GPIO_NUM_4
 #define BLUE_CHANNEL_0 LEDC_CHANNEL_2
 
-void gpio_init(void){
-    gpio_config_t config = {
-        .pin_bit_mask = 1ULL << PIN_1 | 1 << PIN_2 | 1 << PIN_3,
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    gpio_config(&config);
-}
+static color_t white = {
+    .red = 255,
+    .green = 255,
+    .blue = 255,
+};
+
+static color_t red = {
+    .red = 255,
+    .green = 0,
+    .blue = 0,
+};
+
+static color_t blue = {
+    .red = 0,
+    .green = 0,
+    .blue = 255,
+};
+
+static color_t green = {
+    .red = 0,
+    .green = 255,
+    .blue = 0,
+};
 
 void uart_init(void){
     uart_config_t config = {
@@ -41,91 +53,33 @@ void uart_init(void){
     uart_driver_install(UART_NUM_0, 2 * 1024, 0, 0, NULL, 0);
 }
 
+void init(){
+    rgb_t rgb1 = {
+        .red_channel = RED_CHANNEL_0,
+        .green_channel = GREEN_CHANNEL_0,
+        .blue_channel = BLUE_CHANNEL_0,
+        .red_channel_pin = RED_PIN_0,
+        .green_channel_pin = GREEN_PIN_0,
+        .blue_channel_pin = BLUE_PIN_0,
+        .enable_pin = PIN_1,
+        .timer = TIMER,
+    };
+    rgb_init(&rgb1);
+    rgb_enable(&rgb1);
+    while(1){
+        rgb_set_color(&rgb1, &red);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        rgb_set_color(&rgb1, &white);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        rgb_set_color(&rgb1, &green);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        rgb_set_color(&rgb1, &blue);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
 
 void app_main(void){
     uart_init();
-    gpio_init();
-    ledc_init();
-
-    led_t led1 = {
-        .r = 255,
-        .g = 255,
-        .b = 0,
-        .pin = PIN_1,
-    };
-
-    led_t led2 = {
-        .r = 0,
-        .g = 255,
-        .b = 255,
-        .pin = PIN_2,
-    };
-
-    led_t led3 = {
-        .r = 255,
-        .g = 0,
-        .b = 255,
-        .pin = PIN_3,
-    };
-    uint16_t del = 500;
-    
-    led_disable(&led1);
-    led_disable(&led2);
-    led_disable(&led3);
-    
-    // while(1){
-    //     led_set_color(255, 255, 0);
-    //     led_enable(&led1);
-    //     led_disable(&led3);
-    //     vTaskDelay(del / portTICK_PERIOD_MS);
-    //     led_set_color(0, 255, 255);
-    //     led_enable(&led2);
-    //     led_disable(&led1);
-    //     vTaskDelay(del / portTICK_PERIOD_MS);
-    //     led_set_color(255, 0, 255);
-    //     led_enable(&led3);
-    //     led_disable(&led2);
-    //     vTaskDelay(del / portTICK_PERIOD_MS);
-    // }
-
-    while(1){
-        led_set_color(255, 0, 0);
-        led_enable(&led1);
-        led_disable(&led3);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_enable(&led2);
-        led_disable(&led1);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_enable(&led3);
-        led_disable(&led2);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_set_color(0, 255, 0);
-        led_enable(&led1);
-        led_disable(&led3);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_enable(&led2);
-        led_disable(&led1);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_enable(&led3);
-        led_disable(&led2);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_set_color(0, 0, 255);
-        led_enable(&led1);
-        led_disable(&led3);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_enable(&led2);
-        led_disable(&led1);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-        led_enable(&led3);
-        led_disable(&led2);
-        vTaskDelay(del / portTICK_PERIOD_MS);
-    }
-
-    // while(1){
-    //     led_enable(&led3);
-    //     vTaskDelay(del / portTICK_PERIOD_MS);
-    //     led_disable(&led3);
-    //     vTaskDelay(del / portTICK_PERIOD_MS);
-    // }
-
+    init();
 }
