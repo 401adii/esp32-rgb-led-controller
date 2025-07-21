@@ -16,30 +16,6 @@
 #define BLUE_PIN_0 GPIO_NUM_4
 #define BLUE_CHANNEL_0 LEDC_CHANNEL_2
 
-static color_t white = {
-    .red = 255,
-    .green = 255,
-    .blue = 255,
-};
-
-static color_t red = {
-    .red = 255,
-    .green = 0,
-    .blue = 0,
-};
-
-static color_t blue = {
-    .red = 0,
-    .green = 0,
-    .blue = 255,
-};
-
-static color_t green = {
-    .red = 0,
-    .green = 255,
-    .blue = 0,
-};
-
 void uart_init(void){
     uart_config_t config = {
         .baud_rate = 115200,
@@ -65,19 +41,27 @@ void init(){
         .timer = TIMER,
     };
     rgb_init(&rgb1);
-    rgb_enable(&rgb1);
+    color_t user_color = {
+        .red = 255,
+        .green = 100,
+        .blue = 50,
+    };
     while(1){
-        rgb_set_color(&rgb1, &red);
+        rgb_enable(&rgb1);
+        rgb_set_color(&rgb1, &COLOR_WHITE);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        rgb_set_color(&rgb1, &white);
+        rgb_set_color(&rgb1, &COLOR_RED);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        rgb_set_color(&rgb1, &green);
+        rgb_set_color(&rgb1, &COLOR_GREEN);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        rgb_set_color(&rgb1, &blue);
+        rgb_set_color(&rgb1, &COLOR_BLUE);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        rgb_set_color(&rgb1, &user_color);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        rgb_disable(&rgb1);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
-
 
 void app_main(void){
     uart_init();

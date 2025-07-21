@@ -16,7 +16,7 @@ void rgb_disable(rgb_t *rgb){
     gpio_set_level(rgb->enable_pin, 1); //1 so no current flow
 }
 
-void rgb_set_color(rgb_t *rgb, color_t* color){
+void rgb_set_color(rgb_t *rgb, const color_t* color){
     rgb->color = *(color);
     ledc_channel_set(rgb->red_channel, rgb->color.red);
     ledc_channel_set(rgb->blue_channel, rgb->color.green);

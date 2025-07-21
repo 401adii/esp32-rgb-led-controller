@@ -4,12 +4,7 @@
 #include"led_controller.h"
 #include"driver/gpio.h"
 #include"gpio_init.h"
-
-typedef struct{
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-} color_t;
+#include"colors.h"
 
 typedef struct{
     ledc_timer_t timer;
@@ -26,6 +21,6 @@ typedef struct{
 void rgb_init(rgb_t *rgb);
 void rgb_enable(rgb_t *rgb);
 void rgb_disable(rgb_t *rgb);
-void rgb_set_color(rgb_t *rgb, color_t* color);
+void rgb_set_color(rgb_t *rgb, const color_t* color);
 
 #endif
