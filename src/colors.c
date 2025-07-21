@@ -6,6 +6,12 @@ const color_t COLOR_WHITE = {
     .blue = 255
 };
 
+const color_t COLOR_BLACK = {
+    .red = 0,
+    .green = 0,
+    .blue = 0,
+};
+
 const color_t COLOR_RED = {
     .red = 255,
     .green = 0, 

@@ -19,6 +19,6 @@ void rgb_disable(rgb_t *rgb){
 void rgb_set_color(rgb_t *rgb, const color_t* color){
     rgb->color = *(color);
     ledc_channel_set(rgb->red_channel, rgb->color.red);
-    ledc_channel_set(rgb->blue_channel, rgb->color.green);
-    ledc_channel_set(rgb->green_channel, rgb->color.blue);
+    ledc_channel_set(rgb->blue_channel, rgb->color.blue);
+    ledc_channel_set(rgb->green_channel, rgb->color.green);
 }
