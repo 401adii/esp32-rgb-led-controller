@@ -46,7 +46,7 @@ void app_main(void){
     rgb1.blue_channel_pin = BLUE_PIN_0,
     rgb1.enable_pin = PIN_1;
     rgb1.timer = TIMER;
-    rgb1.color = COLOR_RED;
+    rgb1.color = COLOR_WHITE;
 
     rgb_init(&rgb1);
 
@@ -58,7 +58,7 @@ void app_main(void){
     rgb2.blue_channel_pin = BLUE_PIN_0,
     rgb2.enable_pin = PIN_2;
     rgb2.timer = TIMER;
-    rgb2.color = COLOR_BLUE;
+    rgb2.color = COLOR_WHITE;
 
     rgb_init(&rgb2);
 
@@ -70,7 +70,7 @@ void app_main(void){
     rgb3.blue_channel_pin = BLUE_PIN_0,
     rgb3.enable_pin = PIN_3;
     rgb3.timer = TIMER;
-    rgb3.color = COLOR_GREEN;
+    rgb3.color = COLOR_WHITE;
 
     rgb_init(&rgb3);
 
@@ -85,9 +85,11 @@ void app_main(void){
     rgb4.color = COLOR_WHITE;
     
     rgb_init(&rgb4);
-
     while(1){
         rgb_four_color(&rgb1, &rgb2, &rgb3, &rgb4);
+        rgb_transition(&rgb1, &COLOR_RED, 1);
+        rgb_transition(&rgb2, &COLOR_BLUE, 1);
+        rgb_transition(&rgb3, &COLOR_GREEN, 1);
+        rgb_transition(&rgb4, &COLOR_BLACK, 1);
     }
-
 }

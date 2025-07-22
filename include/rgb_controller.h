@@ -11,5 +11,7 @@
 void rgb_two_color(rgb_t *rgb1, rgb_t *rgb2);
 void rgb_three_color(rgb_t *rgb1, rgb_t *rgb2, rgb_t *rgb3);
 void rgb_four_color(rgb_t *rgb1, rgb_t *rgb2, rgb_t *rgb3, rgb_t *rgb4);
+int rgb_transition(rgb_t *rgb, const color_t *color_to, int increment);
+int rgb_color_increment(int val_from, int val_to, int increment);
 
 #endif
