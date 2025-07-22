@@ -6,6 +6,7 @@
 #define PIN_1 GPIO_NUM_17
 #define PIN_2 GPIO_NUM_16
 #define PIN_3 GPIO_NUM_5
+#define PIN_4 GPIO_NUM_18
 
 #define TIMER LEDC_TIMER_0
 
@@ -19,6 +20,7 @@
 static rgb_t rgb1;
 static rgb_t rgb2;
 static rgb_t rgb3;
+static rgb_t rgb4;
 
 void uart_init(void){
     uart_config_t config = {
@@ -72,7 +74,20 @@ void app_main(void){
 
     rgb_init(&rgb3);
 
+    rgb4.red_channel = RED_CHANNEL_0;
+    rgb4.green_channel = GREEN_CHANNEL_0;
+    rgb4.blue_channel = BLUE_CHANNEL_0;
+    rgb4.red_channel_pin = RED_PIN_0;
+    rgb4.green_channel_pin = GREEN_PIN_0;
+    rgb4.blue_channel_pin = BLUE_PIN_0,
+    rgb4.enable_pin = PIN_4;
+    rgb4.timer = TIMER;
+    rgb4.color = COLOR_WHITE;
+    
+    rgb_init(&rgb4);
+
     while(1){
-        rgb_three_color(&rgb1, &rgb2, &rgb3);
+        rgb_four_color(&rgb1, &rgb2, &rgb3, &rgb4);
     }
+
 }
