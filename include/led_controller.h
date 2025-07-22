@@ -4,7 +4,7 @@
 #include"driver/ledc.h"
 
 #define SPEED_MODE LEDC_LOW_SPEED_MODE
-#define PWM_FREQ 4000
+#define PWM_FREQ 156250
 
 void ledc_timer_init(ledc_timer_t timer);
 void ledc_channel_init(ledc_channel_t channel, ledc_timer_t timer, int pin);

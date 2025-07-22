@@ -18,6 +18,7 @@
 
 static rgb_t rgb1;
 static rgb_t rgb2;
+static rgb_t rgb3;
 
 void uart_init(void){
     uart_config_t config = {
@@ -34,18 +35,6 @@ void uart_init(void){
 
 void app_main(void){
     uart_init();
-    
-    // color_t user_color1 = {
-    //     .red = 255,
-    //     .green = 100,
-    //     .blue = 50,
-    // };
-
-    // color_t user_color2 = {
-    //     .red = 50,
-    //     .green = 50,
-    //     .blue = 100,
-    // };
 
     rgb1.red_channel = RED_CHANNEL_0;
     rgb1.green_channel = GREEN_CHANNEL_0;
@@ -55,7 +44,7 @@ void app_main(void){
     rgb1.blue_channel_pin = BLUE_PIN_0,
     rgb1.enable_pin = PIN_1;
     rgb1.timer = TIMER;
-    rgb1.color = COLOR_BLUE;
+    rgb1.color = COLOR_RED;
 
     rgb_init(&rgb1);
 
@@ -67,11 +56,23 @@ void app_main(void){
     rgb2.blue_channel_pin = BLUE_PIN_0,
     rgb2.enable_pin = PIN_2;
     rgb2.timer = TIMER;
-    rgb2.color = COLOR_RED;
+    rgb2.color = COLOR_BLUE;
 
     rgb_init(&rgb2);
 
+    rgb3.red_channel = RED_CHANNEL_0;
+    rgb3.green_channel = GREEN_CHANNEL_0;
+    rgb3.blue_channel = BLUE_CHANNEL_0;
+    rgb3.red_channel_pin = RED_PIN_0;
+    rgb3.green_channel_pin = GREEN_PIN_0;
+    rgb3.blue_channel_pin = BLUE_PIN_0,
+    rgb3.enable_pin = PIN_3;
+    rgb3.timer = TIMER;
+    rgb3.color = COLOR_GREEN;
+
+    rgb_init(&rgb3);
+
     while(1){
-        rgb_two_color(&rgb1, &rgb2);
+        rgb_three_color(&rgb1, &rgb2, &rgb3);
     }
 }
