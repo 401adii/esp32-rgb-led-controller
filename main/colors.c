@@ -50,10 +50,10 @@ const color_t COLOR_CYAN = {
 
 
 const color_t COLORS[] = {COLOR_RED,
-                          COLOR_GREEN,
+                          COLOR_PINK,
                           COLOR_BLUE,
                           COLOR_CYAN,
-                          COLOR_PINK,
+                          COLOR_GREEN,
                           COLOR_YELLOW};
 
 const uint8_t COLORS_LEN = sizeof(COLORS) / sizeof(color_t);

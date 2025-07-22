@@ -3,7 +3,6 @@
 
 #include"freertos/FreeRTOS.h"
 #include"freertos/task.h"
-#include"esp_rom_sys.h"
 #include"rgb.h"
 
 #define MIN_DELAY_MS 1

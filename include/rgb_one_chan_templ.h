@@ -19,6 +19,14 @@
 #define BLUE_PIN_0 GPIO_NUM_4
 #define BLUE_CHANNEL_0 LEDC_CHANNEL_2
 
+static rgb_t rgb1;
+static rgb_t rgb2;
+static rgb_t rgb3;
+static rgb_t rgb4;
+
+void rgb_one_chan_init(void);
+void rgb_one_chan_one_led_spectrum_fade(void *param);
+void rgb_one_chan_four_leds_spectrum_fade(void *param);
 void rgb_one_chan_four_leds_random_fade(void *param);
 
 #endif
