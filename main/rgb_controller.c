@@ -68,3 +68,6 @@ int rgb_transition(rgb_t *rgb, const color_t *color_to, int increment){
 int rgb_color_increment(int val_from, int val_to, int increment){
     return val_from + (val_from > val_to ? -increment : increment);
 }
+
+void rgb_four_led_fade(void){
+}

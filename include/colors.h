@@ -14,5 +14,11 @@ extern const color_t COLOR_WHITE;
 extern const color_t COLOR_RED;
 extern const color_t COLOR_BLUE;
 extern const color_t COLOR_GREEN;
+extern const color_t COLOR_PINK;
+extern const color_t COLOR_YELLOW;
+extern const color_t COLOR_CYAN;
+
+extern const color_t COLORS[];
+extern const uint8_t COLORS_LEN;
 
 #endif

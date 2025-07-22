@@ -10,6 +10,7 @@ idf_component_register(SRCS
                             "main.c"
                             "rgb_controller.c"
                             "rgb.c"
+                            "rgb_one_chan_templ.c"
                         INCLUDE_DIRS
                         "."
                         "../include")
