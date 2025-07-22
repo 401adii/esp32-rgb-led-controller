@@ -1,7 +1,7 @@
-.pio
+build/
+sdkconfig
+sdkconfig.old
+.devcontainer
 .vscode
-lib
-test
-sdkconfig.esp32dev
-platformio.ini
-include/README
+.clangd
+README.md
