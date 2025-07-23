@@ -4,10 +4,6 @@ int rgb_one_chan_check_leds(int n){
     return n <= MAX_LEDS ? 1 : 0;
 }
 
-void rgb_one_chan_spectrum_fade(void *param){
-    
-}
-
 int rgb_one_chan_init(int n){
     if(!rgb_one_chan_check_leds(n))
         return 0;
@@ -23,10 +19,43 @@ int rgb_one_chan_init(int n){
         rgbs[i].blue_channel_pin = BLUE_PIN_0,
         rgbs[i].enable_pin = pins[i];
         rgbs[i].timer = TIMER;
+        rgbs[i].color = COLOR_BLACK;
         rgb_init(&rgbs[i]);    
     }
     return 1;
 }
+
+void rgb_one_chan_spectrum_fade(void *param){
+    uint8_t n = *(int*)param;
+
+    if(!rgb_one_chan_init(n))
+        return;
+
+    uint8_t idx = 0;
+    color_t color_to[MAX_LEDS];
+    const uint8_t INCREMENT = 1;
+    
+    for(int i = 0; i < n; i++){
+        rgbs[i].color = COLORS[0 + i];
+        color_to[i] = COLORS[1 + i];
+    }
+
+    while(1){
+        rgb_mux(rgbs, n);
+
+        if(rgb_transition(&rgbs[0], &color_to[0], INCREMENT)){
+            if(++idx >= COLORS_LEN)
+                idx = 0;
+            for(int i = 0; i < n; i++){
+                color_to[i] = COLORS[(idx + i + 1) % COLORS_LEN];
+            }
+        }
+        for(int i = 1; i < n; i++){
+            rgb_transition(&rgbs[i], &color_to[i], INCREMENT);
+        }
+    }
+}
+
 
 void rgb_one_chan_random_fade(void *param){
     uint8_t n = *(int*)param;
@@ -34,14 +63,11 @@ void rgb_one_chan_random_fade(void *param){
     if(!rgb_one_chan_init(n))
         return;
     
-    color_t color_to[4];
+    color_t color_to[MAX_LEDS];
     const uint8_t INCREMENT = 1;
 
     for(int i = 0; i < n; i++){
         rgbs[i].color = COLOR_WHITE;
-    }
-    
-    for(int i = 0; i < n; i++){
         color_to[i] = COLORS[esp_random() % COLORS_LEN];
     }
     
@@ -51,6 +77,6 @@ void rgb_one_chan_random_fade(void *param){
         for(int i = 0; i < n; i++){
             if(rgb_transition(&rgbs[i], &color_to[i], INCREMENT))
                 color_to[i] = COLORS[esp_random() % COLORS_LEN];
-        }        
+        }
     }
 }
