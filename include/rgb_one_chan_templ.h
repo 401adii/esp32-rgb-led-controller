@@ -1,9 +1,11 @@
 #ifndef RGB_ONE_CHAN_TEMPL_H
 #define RGB_ONE_CHAN_TEMPL_H
 
+#include"driver/gptimer.h"
 #include"rgb_controller.h"
 #include"colors.h"
 #include"esp_random.h"
+#include"timer.h"
 
 #define PIN_1 GPIO_NUM_17
 #define PIN_2 GPIO_NUM_16
@@ -27,5 +29,6 @@ int rgb_one_chan_init(int n);
 int rgb_one_chan_check_leds(int n);
 void rgb_one_chan_spectrum_fade(void *param);
 void rgb_one_chan_random_fade(void *param);
+void rgb_one_chan_test(void *param);
 
 #endif

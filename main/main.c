@@ -2,6 +2,7 @@
 #include"freertos/task.h"
 #include"driver/uart.h"
 #include"rgb_one_chan_templ.h"
+#include"timer.h"
 
 void uart_init(void){
     uart_config_t config = {
@@ -17,9 +18,7 @@ void uart_init(void){
 }
 
 void app_main(void){
-    int rgb_count = 3;
     uart_init();
-
-    xTaskCreatePinnedToCore(rgb_one_chan_spectrum_fade, "RGB Task", 4096, &rgb_count, 1, NULL, 0);
-    // xTaskCreatePinnedToCore(rgb_one_chan_random_fade, "RGB Task", 4096, &rgb_count, 1, NULL, 0);
-}
+    int leds = 4;
+    xTaskCreatePinnedToCore(rgb_one_chan_test, "rgb task", 4096, &leds, 0, NULL, 0);
+}   

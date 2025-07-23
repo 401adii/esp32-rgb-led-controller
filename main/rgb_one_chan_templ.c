@@ -21,6 +21,7 @@ int rgb_one_chan_init(int n){
         rgbs[i].timer = TIMER;
         rgbs[i].color = COLOR_BLACK;
         rgb_init(&rgbs[i]);    
+        rgb_disable(&rgbs[i]);
     }
     return 1;
 }
@@ -78,5 +79,36 @@ void rgb_one_chan_random_fade(void *param){
             if(rgb_transition(&rgbs[i], &color_to[i], INCREMENT))
                 color_to[i] = COLORS[esp_random() % COLORS_LEN];
         }
+    }
+}
+
+void rgb_one_chan_test(void *param){
+    uint8_t n = *(int*)param;
+
+    if(!rgb_one_chan_init(n))
+        return;
+
+
+    uint8_t sw_flag = 1;
+    color_t color_to[MAX_LEDS];
+    
+    gptimer_handle_t timer = timer_init();
+    
+    for(int i = 0; i < n; i++){
+        rgbs[i].color = COLORS[0 + i];
+        color_to[i] = COLORS[1 + i];
+    }
+
+    rgb_set_color(&rgbs[0], &(rgbs[0].color));
+    timer_start(timer);
+    while(1){   
+        if(timer_passed(timer,500)){
+            timer_reset(timer);
+            sw_flag = !sw_flag;
+        }
+        if(sw_flag)
+            rgb_enable(&rgbs[0]);
+        else
+            rgb_disable(&rgbs[0]);
     }
 }
