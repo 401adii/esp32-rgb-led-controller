@@ -23,49 +23,13 @@ void rgb_set_color(rgb_t *rgb, const color_t* color){
     ledc_channel_set(rgb->green_channel, rgb->color.green);
 }
 
-void rgb_two_color(rgb_t *rgb1, rgb_t *rgb2){
-    rgb_set_color(rgb1, &(rgb1->color));
-    rgb_enable(rgb1);
-    rgb_disable(rgb2);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-    rgb_set_color(rgb2, &(rgb2->color));
-    rgb_enable(rgb2);
-    rgb_disable(rgb1);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-}
-
-void rgb_three_color(rgb_t *rgb1, rgb_t *rgb2, rgb_t *rgb3){
-    rgb_set_color(rgb1, &(rgb1->color));
-    rgb_enable(rgb1);
-    rgb_disable(rgb3);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-    rgb_set_color(rgb2, &(rgb2->color));
-    rgb_enable(rgb2);
-    rgb_disable(rgb1);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-    rgb_set_color(rgb3, &(rgb3->color));
-    rgb_enable(rgb3);
-    rgb_disable(rgb2);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-}
-
-void rgb_four_color(rgb_t *rgb1, rgb_t *rgb2, rgb_t *rgb3, rgb_t *rgb4){
-    rgb_set_color(rgb1, &(rgb1->color));
-    rgb_enable(rgb1);
-    rgb_disable(rgb4);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-    rgb_set_color(rgb2, &(rgb2->color));
-    rgb_enable(rgb2);
-    rgb_disable(rgb1);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-    rgb_set_color(rgb3, &(rgb3->color));
-    rgb_enable(rgb3);
-    rgb_disable(rgb2);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
-    rgb_set_color(rgb4, &(rgb4->color));
-    rgb_enable(rgb4);
-    rgb_disable(rgb3);
-    vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
+void rgb_mux(rgb_t *rgbs, uint8_t length){
+    for(int i = 0; i < length; i++){
+        rgb_set_color(&rgbs[i], &(rgbs[i].color));
+        rgb_enable(&rgbs[i]);
+        rgb_disable(&rgbs[i == 0 ? length - 1 : i - 1]);
+        vTaskDelay(MIN_DELAY_MS / portTICK_PERIOD_MS);
+    }
 }
 
 int rgb_transition(rgb_t *rgb, const color_t *color_to, int increment){
@@ -90,7 +54,4 @@ int rgb_transition(rgb_t *rgb, const color_t *color_to, int increment){
 
 int rgb_color_increment(int val_from, int val_to, int increment){
     return val_from + (val_from > val_to ? -increment : increment);
-}
-
-void rgb_four_led_fade(void){
 }

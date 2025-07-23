@@ -19,12 +19,9 @@
 #define BLUE_PIN_0 GPIO_NUM_4
 #define BLUE_CHANNEL_0 LEDC_CHANNEL_2
 
-static rgb_t rgb1;
-static rgb_t rgb2;
-static rgb_t rgb3;
-static rgb_t rgb4;
+#define MAX_LEDS 4
 
-static rgb_t *rgbs[] = {&rgb1, &rgb2, &rgb3, &rgb4};
+static rgb_t rgbs[MAX_LEDS];
 
 void rgb_one_chan_init(int n);
 void rgb_one_chan_one_led_spectrum_fade(void *param);
