@@ -1,7 +1,6 @@
 #include "rgb_one_chan_templ.h"
 
-void rgb_one_chan_init(void *param){
-    int n = *(int*)param;
+void rgb_one_chan_init(int n){
     const int pins[] = {PIN_1, PIN_2, PIN_3, PIN_4};
 
     for(int i = 0; i < n; i++){
@@ -68,33 +67,28 @@ void rgb_one_chan_four_leds_spectrum_fade(void *param){
 }
 
 void rgb_one_chan_four_leds_random_fade(void *param){
-
-    rgb1.color = COLOR_WHITE;
-    rgb2.color = COLOR_WHITE;
-    rgb3.color = COLOR_WHITE;
-    rgb4.color = COLOR_WHITE;
+    int n = *(int*)param;
+    rgb_one_chan_init(n);
     
-    color_t rgb1_color_to = COLORS[esp_random() % COLORS_LEN];
-    color_t rgb2_color_to = COLORS[esp_random() % COLORS_LEN];
-    color_t rgb3_color_to = COLORS[esp_random() % COLORS_LEN];
-    color_t rgb4_color_to = COLORS[esp_random() % COLORS_LEN];
+    color_t color_to[4];
+
+    for(int i = 0; i < n; i++){
+        rgbs[i]->color = COLOR_WHITE;
+    }
+    
+    for(int i = 0; i < n; i++){
+        color_to[i] = COLORS[esp_random() % COLORS_LEN];
+    }
 
     const uint8_t INCREMENT = 1;
     
     while(1){
-        rgb_four_color(&rgb1, &rgb2, &rgb3, &rgb4);
-        
-        if(rgb_transition(&rgb1, &rgb1_color_to, INCREMENT))
-            rgb1_color_to = COLORS[esp_random() % COLORS_LEN];
-        
-        if(rgb_transition(&rgb2, &rgb2_color_to, INCREMENT))
-            rgb2_color_to = COLORS[esp_random() % COLORS_LEN];
-        
-        if(rgb_transition(&rgb3, &rgb3_color_to, INCREMENT))
-            rgb3_color_to = COLORS[esp_random() % COLORS_LEN];
-        
-        if(rgb_transition(&rgb4, &rgb4_color_to, INCREMENT))
-            rgb4_color_to = COLORS[esp_random() % COLORS_LEN];    
+        rgb_four_color(rgbs[0], rgbs[1], rgbs[2], rgbs[3]);
+
+        for(int i = 0; i < n; i++){
+            if(rgb_transition(rgbs[i], &color_to[i], INCREMENT))
+                color_to[i] = COLORS[esp_random() % COLORS_LEN];
+        }
         
     }
 }

@@ -9,7 +9,6 @@ idf_component_register(SRCS
                             "led_controller.c"
                             "main.c"
                             "rgb_controller.c"
-                            "rgb.c"
                             "rgb_one_chan_templ.c"
                         INCLUDE_DIRS
                         "."

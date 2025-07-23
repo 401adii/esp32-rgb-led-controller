@@ -26,7 +26,7 @@ static rgb_t rgb4;
 
 static rgb_t *rgbs[] = {&rgb1, &rgb2, &rgb3, &rgb4};
 
-void rgb_one_chan_init(void *param);
+void rgb_one_chan_init(int n);
 void rgb_one_chan_one_led_spectrum_fade(void *param);
 void rgb_one_chan_four_leds_spectrum_fade(void *param);
 void rgb_one_chan_four_leds_random_fade(void *param);
