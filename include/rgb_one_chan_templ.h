@@ -23,9 +23,9 @@
 
 static rgb_t rgbs[MAX_LEDS];
 
-void rgb_one_chan_init(int n);
-void rgb_one_chan_one_led_spectrum_fade(void *param);
-void rgb_one_chan_four_leds_spectrum_fade(void *param);
-void rgb_one_chan_four_leds_random_fade(void *param);
+int rgb_one_chan_init(int n);
+int rgb_one_chan_check_leds(int n);
+void rgb_one_chan_spectrum_fade(void *param);
+void rgb_one_chan_random_fade(void *param);
 
 #endif

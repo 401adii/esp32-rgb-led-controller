@@ -3,13 +3,12 @@
 
 #include"freertos/FreeRTOS.h"
 #include"freertos/task.h"
-#include"led_controller.h"
-
-#define MIN_DELAY_MS 1
-#include"led_controller.h"
 #include"driver/gpio.h"
+#include"led_controller.h"
 #include"gpio_init.h"
 #include"colors.h"
+
+#define MIN_DELAY_MS 1
 
 typedef struct{
     ledc_timer_t timer;
