@@ -1,45 +1,20 @@
 #include "rgb_one_chan_templ.h"
 
-void rgb_one_chan_init(void){
-    rgb1.red_channel = RED_CHANNEL_0;
-    rgb1.green_channel = GREEN_CHANNEL_0;
-    rgb1.blue_channel = BLUE_CHANNEL_0;
-    rgb1.red_channel_pin = RED_PIN_0;
-    rgb1.green_channel_pin = GREEN_PIN_0;
-    rgb1.blue_channel_pin = BLUE_PIN_0,
-    rgb1.enable_pin = PIN_1;
-    rgb1.timer = TIMER;
-    rgb_init(&rgb1);
-    
-    rgb2.red_channel = RED_CHANNEL_0;
-    rgb2.green_channel = GREEN_CHANNEL_0;
-    rgb2.blue_channel = BLUE_CHANNEL_0;
-    rgb2.red_channel_pin = RED_PIN_0;
-    rgb2.green_channel_pin = GREEN_PIN_0;
-    rgb2.blue_channel_pin = BLUE_PIN_0,
-    rgb2.enable_pin = PIN_2;
-    rgb2.timer = TIMER;
-    rgb_init(&rgb2);
-    
-    rgb3.red_channel = RED_CHANNEL_0;
-    rgb3.green_channel = GREEN_CHANNEL_0;
-    rgb3.blue_channel = BLUE_CHANNEL_0;
-    rgb3.red_channel_pin = RED_PIN_0;
-    rgb3.green_channel_pin = GREEN_PIN_0;
-    rgb3.blue_channel_pin = BLUE_PIN_0,
-    rgb3.enable_pin = PIN_3;
-    rgb3.timer = TIMER;
-    rgb_init(&rgb3);
-    
-    rgb4.red_channel = RED_CHANNEL_0;
-    rgb4.green_channel = GREEN_CHANNEL_0;
-    rgb4.blue_channel = BLUE_CHANNEL_0;
-    rgb4.red_channel_pin = RED_PIN_0;
-    rgb4.green_channel_pin = GREEN_PIN_0;
-    rgb4.blue_channel_pin = BLUE_PIN_0,
-    rgb4.enable_pin = PIN_4;
-    rgb4.timer = TIMER;
-    rgb_init(&rgb4);
+void rgb_one_chan_init(void *param){
+    int n = *(int*)param;
+    const int pins[] = {PIN_1, PIN_2, PIN_3, PIN_4};
+
+    for(int i = 0; i < n; i++){
+        rgbs[i]->red_channel = RED_CHANNEL_0;
+        rgbs[i]->green_channel = GREEN_CHANNEL_0;
+        rgbs[i]->blue_channel = BLUE_CHANNEL_0;
+        rgbs[i]->red_channel_pin = RED_PIN_0;
+        rgbs[i]->green_channel_pin = GREEN_PIN_0;
+        rgbs[i]->blue_channel_pin = BLUE_PIN_0,
+        rgbs[i]->enable_pin = pins[i];
+        rgbs[i]->timer = TIMER;
+        rgb_init(rgbs[i]);    
+    }
 }
 
 void rgb_one_chan_one_led_spectrum_fade(void *param){

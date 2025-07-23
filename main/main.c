@@ -17,8 +17,9 @@ void uart_init(void){
 }
 
 void app_main(void){
+    int rgb_count = 4;
     uart_init();
-    rgb_one_chan_init();
+    rgb_one_chan_init(&rgb_count);
     // xTaskCreatePinnedToCore(rgb_one_chan_one_led_spectrum_fade, "RGB Task", 4096, NULL, 1, NULL, 0);
     xTaskCreatePinnedToCore(rgb_one_chan_four_leds_spectrum_fade, "RGB Task", 4096, NULL, 1, NULL, 0);
     //xTaskCreatePinnedToCore(rgb_one_chan_four_leds_random_fade, "RGB Task", 4096, NULL, 1, NULL, 0);
