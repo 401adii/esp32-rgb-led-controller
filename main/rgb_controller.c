@@ -9,7 +9,14 @@ void rgb_init(rgb_t *rgb){
 }
 
 void rgb_deinit(rgb_t *rgb){
-    
+    ledc_timer_deinit(rgb->timer);
+    ledc_channel_deinit(rgb->red_channel);
+    ledc_channel_deinit(rgb->green_channel);
+    ledc_channel_deinit(rgb->blue_channel);
+    gpio_deinit(rgb->red_channel_pin);
+    gpio_deinit(rgb->green_channel_pin);
+    gpio_deinit(rgb->blue_channel_pin);
+    gpio_deinit(rgb->enable_pin);
 }
 
 void rgb_enable(rgb_t *rgb){

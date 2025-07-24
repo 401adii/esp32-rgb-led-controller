@@ -26,7 +26,7 @@ int fadeRandomTask(){
 int stopTask(){
     if(current_task == NULL)
         return 1;
-    rgb_one_chan_de
+    rgb_one_chan_deinit(LEDS);
     vTaskDelete(current_task);
     current_task = NULL;
     return 0;

@@ -10,3 +10,7 @@ void gpio_init(int pin){
     };
     gpio_config(&config);
 }
+
+void gpio_deinit(int pin){
+    gpio_reset_pin(pin);
+}

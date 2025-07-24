@@ -27,7 +27,7 @@ int rgb_one_chan_init(int n){
 }
 
 void rgb_one_chan_deinit(int n){
-    
+    rgb_deinit(&rgbs[0]);
 }
 
 void rgb_one_chan_spectrum_fade(void *param){
