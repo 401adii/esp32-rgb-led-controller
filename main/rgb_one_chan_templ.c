@@ -27,7 +27,7 @@ int rgb_one_chan_init(int n){
 }
 
 void rgb_one_chan_spectrum_fade(void *param){
-    uint8_t n = *(int*)param;
+    uint8_t n = *(uint8_t*)param;
 
     if(!rgb_one_chan_init(n))
         return;
@@ -110,5 +110,6 @@ void rgb_one_chan_test(void *param){
             rgb_enable(&rgbs[0]);
         else
             rgb_disable(&rgbs[0]);
+        vTaskDelay(1 / portTICK_PERIOD_MS);
     }
 }

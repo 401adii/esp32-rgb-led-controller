@@ -31,6 +31,6 @@ int timer_passed(gptimer_handle_t timer, uint32_t time_ms){
 }
 
 int timer_ms_to_ticks(uint32_t time_ms){
-    return time_ms * 1 / RESOLUTION;
+    return time_ms * RESOLUTION / 1000;
 }
 
