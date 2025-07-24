@@ -13,11 +13,11 @@ void console_start(void){
     esp_console_start_repl(repl);
 }
 
-void console_add(const char *cmd, const char *help, esp_console_cmd_func_t func){
+void console_add(const char *cmd, const char *help, const char *hint, esp_console_cmd_func_t func){
     esp_console_cmd_t config = {
         .command = cmd,
         .help = help,
-        .hint = NULL,
+        .hint = hint,
         .func = func,
         .argtable = NULL,
     };

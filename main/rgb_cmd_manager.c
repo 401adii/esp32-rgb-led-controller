@@ -58,9 +58,24 @@ int alt_blink_task(int argc, char **argv){
 
 void rgb_cmd_init(){
     console_init();
-    console_add("stop", "Stops current pattern", stop_task);
-    console_add("fade", "Enables full color spectrum fade pattern", fade_task);
-    console_add("fade_random", "Enables fade pattern with random colors", fade_random_task);
-    console_add("alt_blink", "Enables alteranting, blinking pattern with full color spectrum", alt_blink_task);
+    
+    console_add("fade",\
+         "Enables full color spectrum fade pattern",\
+         "[<n> - Number of LEDs]",\
+          fade_task);
+    console_add("fade_random",\
+         "Enables fade pattern with random colors",\
+         "[<n> - Number of LEDs]",\
+          fade_random_task);
+    console_add("alt_blink",\
+         "Enables alteranting, blinking pattern with full color spectrum",\
+         "[<n> - Number of LEDs]",\
+          alt_blink_task);
+    console_add("stop",\
+         "Stops current pattern\n",\
+         NULL,\
+         stop_task);
+    
+    
     console_start();
 }
