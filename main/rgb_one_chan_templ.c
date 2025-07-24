@@ -6,10 +6,10 @@ int rgb_one_chan_check_leds(int n){
 
 int rgb_one_chan_init(int n){
     if(!rgb_one_chan_check_leds(n))
-        return 0;
+    return 0;
     
     const int pins[] = {PIN_1, PIN_2, PIN_3, PIN_4};
-
+    
     for(int i = 0; i < n; i++){
         rgbs[i].red_channel = RED_CHANNEL_0;
         rgbs[i].green_channel = GREEN_CHANNEL_0;
@@ -26,11 +26,15 @@ int rgb_one_chan_init(int n){
     return 1;
 }
 
+void rgb_one_chan_deinit(int n){
+    
+}
+
 void rgb_one_chan_spectrum_fade(void *param){
     uint8_t n = *(uint8_t*)param;
 
     if(!rgb_one_chan_init(n))
-        return;
+        vTaskDelete(NULL);
 
     uint8_t idx = 0;
     color_t color_to[MAX_LEDS];
@@ -62,7 +66,7 @@ void rgb_one_chan_random_fade(void *param){
     uint8_t n = *(int*)param;
     
     if(!rgb_one_chan_init(n))
-        return;
+        vTaskDelete(NULL);
     
     color_t color_to[MAX_LEDS];
     const uint8_t INCREMENT = 1;
@@ -85,8 +89,8 @@ void rgb_one_chan_random_fade(void *param){
 void rgb_one_chan_spectrum_alt_blink(void *param){
     uint8_t n = *(uint8_t*)param;
 
-    if(!rgb_one_chan_init(n))
-        return;
+    if(!rgb_one_chan_init(n) || n < 2)
+        vTaskDelete(NULL);
 
     uint8_t idx = 0;
     uint8_t sw_flag = 0;
@@ -121,15 +125,4 @@ void rgb_one_chan_spectrum_alt_blink(void *param){
         vTaskDelay(1 / portTICK_PERIOD_MS);
     }
     
-}
-
-void rgb_one_chan_test(void *param){
-    uint8_t n = *(int*)param;
-
-    if(!rgb_one_chan_init(n))
-        return;
-
-    while(1){   
-        vTaskDelay(1 / portTICK_PERIOD_MS);
-    }
 }

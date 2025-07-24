@@ -8,6 +8,10 @@ void rgb_init(rgb_t *rgb){
     gpio_init(rgb->enable_pin);
 }
 
+void rgb_deinit(rgb_t *rgb){
+    
+}
+
 void rgb_enable(rgb_t *rgb){
     gpio_set_level(rgb->enable_pin, 0); //0 so GPIO acts as a 'ground'
 }

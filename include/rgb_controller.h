@@ -23,6 +23,7 @@ typedef struct{
 } rgb_t;
 
 void rgb_init(rgb_t *rgb);
+void rgb_deinit(rgb_t *rgb);
 void rgb_enable(rgb_t *rgb);
 void rgb_disable(rgb_t *rgb);
 void rgb_set_color(rgb_t *rgb, const color_t* color);
