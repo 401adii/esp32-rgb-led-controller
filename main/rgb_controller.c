@@ -35,6 +35,13 @@ void rgb_set_color(rgb_t *rgb, const color_t* color){
 }
 
 void rgb_mux(rgb_t *rgbs, uint8_t length){
+    if(length == 1){
+        rgb_enable(&rgbs[0]);
+        rgb_set_color(&rgbs[0], &(rgbs[0].color));
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+        return;
+    }
+
     for(int i = 0; i < length; i++){
         rgb_set_color(&rgbs[i], &(rgbs[i].color));
         rgb_enable(&rgbs[i]);

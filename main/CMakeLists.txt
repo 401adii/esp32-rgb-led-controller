@@ -12,7 +12,7 @@ idf_component_register(SRCS
                             "rgb_one_chan_templ.c"
                             "timer.c"
                             "cmd_console.c"
-                           
+                            "rgb_cmd_manager.c"
                         INCLUDE_DIRS
                         "."
                         "../include")

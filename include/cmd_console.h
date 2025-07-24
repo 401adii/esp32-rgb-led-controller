@@ -9,6 +9,6 @@ static esp_console_repl_t *repl;
 
 void console_init(void);
 void console_start(void);
-void console_add(char *cmd, char *help, esp_console_cmd_func_t func);
+void console_add(const char *cmd, const char *help, esp_console_cmd_func_t func);
 
 #endif
