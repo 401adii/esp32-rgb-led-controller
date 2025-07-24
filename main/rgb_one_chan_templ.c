@@ -82,34 +82,54 @@ void rgb_one_chan_random_fade(void *param){
     }
 }
 
+void rgb_one_chan_spectrum_alt_blink(void *param){
+    uint8_t n = *(uint8_t*)param;
+
+    if(!rgb_one_chan_init(n))
+        return;
+
+    uint8_t idx = 0;
+    uint8_t sw_flag = 0;
+    gptimer_handle_t timer = timer_init();
+    const uint16_t TIME_MS = 250;
+    
+    for(int i = 0; i < n; i++)
+        rgbs[i].color = COLORS[0 + i];
+
+    timer_start(timer);
+
+    while(1){
+        rgb_mux(rgbs, n);
+        
+        if(timer_passed(timer, TIME_MS)){
+            timer_reset(timer);
+            sw_flag = !sw_flag;
+            if(++idx >= COLORS_LEN)
+                idx = 0;
+            for(int i = 0; i < n; i++)
+                rgbs[i].color = COLORS[(sw_flag + idx + i) % COLORS_LEN];
+        }
+        
+        for(int i = 0; i < n; i++){
+            if(i % 2 == sw_flag){
+                rgb_set_color(&rgbs[i], &rgbs[i].color);
+            }
+            else{
+                rgb_set_color(&rgbs[i], &COLOR_BLACK);
+            }
+        }
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+    }
+    
+}
+
 void rgb_one_chan_test(void *param){
     uint8_t n = *(int*)param;
 
     if(!rgb_one_chan_init(n))
         return;
 
-
-    uint8_t sw_flag = 1;
-    color_t color_to[MAX_LEDS];
-    
-    gptimer_handle_t timer = timer_init();
-    
-    for(int i = 0; i < n; i++){
-        rgbs[i].color = COLORS[0 + i];
-        color_to[i] = COLORS[1 + i];
-    }
-
-    rgb_set_color(&rgbs[0], &(rgbs[0].color));
-    timer_start(timer);
     while(1){   
-        if(timer_passed(timer,500)){
-            timer_reset(timer);
-            sw_flag = !sw_flag;
-        }
-        if(sw_flag)
-            rgb_enable(&rgbs[0]);
-        else
-            rgb_disable(&rgbs[0]);
         vTaskDelay(1 / portTICK_PERIOD_MS);
     }
 }

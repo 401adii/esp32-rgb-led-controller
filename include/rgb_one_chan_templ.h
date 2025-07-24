@@ -29,6 +29,7 @@ int rgb_one_chan_init(int n);
 int rgb_one_chan_check_leds(int n);
 void rgb_one_chan_spectrum_fade(void *param);
 void rgb_one_chan_random_fade(void *param);
+void rgb_one_chan_spectrum_alt_blink(void *param);
 void rgb_one_chan_test(void *param);
 
 #endif

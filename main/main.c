@@ -20,5 +20,5 @@ void uart_init(void){
 void app_main(void){
     uart_init();
     int leds = 4;
-    xTaskCreatePinnedToCore(rgb_one_chan_test, "rgb task", 4096, &leds, 1, NULL, 0);
+    xTaskCreatePinnedToCore(rgb_one_chan_spectrum_alt_blink, "rgb task", 4096, &leds, 1, NULL, 0);
 }   
