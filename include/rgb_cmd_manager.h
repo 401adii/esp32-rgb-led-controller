@@ -1,14 +1,14 @@
 #ifndef RGB_CMD_MANAGER_H
 #define RGB_CMD_MANAGER_H
 
-#define LEDS_DEFAULT 4
-#define LEDS_MAX 4
-
 #include"freertos/FreeRTOS.h"
 #include"freertos/task.h"
 #include"cmd_console.h"
 #include"rgb_one_chan_templ.h"
 #include"argtable3/argtable3.h"
+
+#define LEDS_DEFAULT 4
+#define LEDS_MAX 4
 
 static TaskHandle_t current_task;
 static uint8_t led_count;

@@ -7,7 +7,7 @@ idf_component_register(SRCS
                             "main.c"
                             "colors.c"
                             "gpio_init.c"
-                            "led_controller.c"
+                            "ledc_8bit_lowspeed.c"
                             "rgb_controller.c"
                             "rgb_one_chan_templ.c"
                             "timer.c"
