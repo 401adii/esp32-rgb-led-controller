@@ -1,6 +1,9 @@
 #include "gpio_init.h"
 
-void gpio_init(int pin){
+static bool gpio_used[GPIO_NUM_MAX] = {0};
+
+esp_err_t gpio_init(gpio_num_t pin){
+    if(gpio_used[pin]) return ESP_OK;
     gpio_config_t config = {
         .pin_bit_mask = 1ULL << pin,
         .mode = GPIO_MODE_OUTPUT,
@@ -8,9 +11,15 @@ void gpio_init(int pin){
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
         .intr_type = GPIO_INTR_DISABLE,
     };
-    gpio_config(&config);
+    esp_err_t ret = gpio_config(&config);
+    if(ret == ESP_OK) gpio_used[pin] = true;
+    return ret;
 }
 
-void gpio_deinit(int pin){
-    gpio_reset_pin(pin);
+esp_err_t gpio_deinit(gpio_num_t pin){
+    esp_err_t ret = gpio_set_direction(pin, GPIO_MODE_OUTPUT);
+    if(ret != ESP_OK) return ret;
+    ret = gpio_reset_pin(pin);
+    if(ret == ESP_OK) gpio_used[pin] = false;
+    return ret;
 }
