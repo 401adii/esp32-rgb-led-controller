@@ -1,4 +1,4 @@
-#include"cmd_console.h"
+#include"console_init.h"
 
 void console_init(void){
     repl = NULL;

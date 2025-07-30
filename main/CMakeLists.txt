@@ -11,8 +11,8 @@ idf_component_register(SRCS
                             "rgb_controller.c"
                             "rgb_one_chan_templ.c"
                             "timer.c"
-                            "cmd_console.c"
-                            "rgb_cmd_manager.c"
+                            "console_init.c"
+                           
                         INCLUDE_DIRS
                         "."
                         "../include")

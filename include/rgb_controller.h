@@ -28,7 +28,7 @@ void rgb_enable(rgb_t *rgb);
 void rgb_disable(rgb_t *rgb);
 void rgb_set_color(rgb_t *rgb, const color_t* color);
 void rgb_mux(rgb_t *rgbs, uint8_t len);
-int rgb_transition(rgb_t *rgb, const color_t *color_to, int increment);
+bool rgb_transition(rgb_t *rgb, const color_t *color_to, int increment);
 int rgb_color_increment(int val_from, int val_to, int increment);
 
 #endif

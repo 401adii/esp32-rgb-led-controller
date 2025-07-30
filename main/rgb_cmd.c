@@ -1,4 +1,4 @@
-#include"rgb_cmd_manager.h"
+#include"rgb_cmd.h"
 
 int parse_led_arg(int argc, char **argv){
     struct arg_int *num_leds = arg_int0(NULL, NULL, "<n>", "Number of LEDs (optional)");

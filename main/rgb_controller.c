@@ -50,13 +50,13 @@ void rgb_mux(rgb_t *rgbs, uint8_t length){
     }
 }
 
-int rgb_transition(rgb_t *rgb, const color_t *color_to, int increment){
-    uint8_t red_flag = rgb->color.red == color_to->red ? 1 : 0;
-    uint8_t green_flag = rgb->color.green == color_to->green ? 1 : 0;
-    uint8_t blue_flag = rgb->color.blue == color_to->blue ? 1 : 0;
+bool rgb_transition(rgb_t *rgb, const color_t *color_to, int increment){
+    bool red_flag = rgb->color.red == color_to->red ? 1 : 0;
+    bool green_flag = rgb->color.green == color_to->green ? 1 : 0;
+    bool blue_flag = rgb->color.blue == color_to->blue ? 1 : 0;
 
     if(red_flag && green_flag && blue_flag)
-        return 1;
+        return true;
 
     if(!red_flag)
         rgb->color.red = rgb_color_increment(rgb->color.red, color_to->red, increment);
@@ -67,7 +67,7 @@ int rgb_transition(rgb_t *rgb, const color_t *color_to, int increment){
     if(!blue_flag)
         rgb->color.blue = rgb_color_increment(rgb->color.blue, color_to->blue, increment);
     rgb_set_color(rgb, &(rgb->color));
-    return 0;
+    return false;
 }
 
 int rgb_color_increment(int val_from, int val_to, int increment){
