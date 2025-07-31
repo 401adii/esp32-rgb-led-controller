@@ -26,6 +26,7 @@
 #define MAX_LEDS 4
 
 static rgb_t rgbs[MAX_LEDS];
+static uint8_t led_count;
 
 int rgb_one_chan_check_leds(int n);
 int rgb_one_chan_init(int n);

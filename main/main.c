@@ -1,4 +1,4 @@
-#include"rgb_cmd_manager.h"
+#include"rgb_cmd.h"
 
 void app_main(void){
     rgb_cmd_init();

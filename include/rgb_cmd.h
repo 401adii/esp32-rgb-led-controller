@@ -9,9 +9,12 @@
 
 #define LEDS_DEFAULT 4
 #define LEDS_MAX 4
+#define SPEED_DEFAULT 3
+#define SPEED_MAX 5
 
 static TaskHandle_t current_task;
 static uint8_t led_count;
+static uint16_t effect_speed;
 
 int parse_led_arg(int argc, char **argv);
 int stop_task();

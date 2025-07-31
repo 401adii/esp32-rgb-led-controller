@@ -6,9 +6,11 @@ int rgb_one_chan_check_leds(int n){
 
 int rgb_one_chan_init(int n){
     if(!rgb_one_chan_check_leds(n))
-    return 0;
+    return 1;
     
     const int pins[] = {PIN_1, PIN_2, PIN_3, PIN_4};
+    
+    led_count = n;
     
     for(int i = 0; i < n; i++){
         rgbs[i].red_channel = RED_CHANNEL_0;
@@ -23,7 +25,7 @@ int rgb_one_chan_init(int n){
         rgb_init(&rgbs[i]);    
         rgb_disable(&rgbs[i]);
     }
-    return 1;
+    return 0;
 }
 
 void rgb_one_chan_deinit(int n){
@@ -33,31 +35,26 @@ void rgb_one_chan_deinit(int n){
 }
 
 void rgb_one_chan_spectrum_fade(void *param){
-    uint8_t n = *(uint8_t*)param;
-
-    if(!rgb_one_chan_init(n))
-        vTaskDelete(NULL);
-
+    const uint8_t INCREMENT = *(uint8_t*)param;
     uint8_t idx = 0;
     color_t color_to[MAX_LEDS];
-    const uint8_t INCREMENT = 1;
     
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < led_count; i++){
         rgbs[i].color = COLORS[0 + i];
         color_to[i] = COLORS[1 + i];
     }
 
     while(1){
-        rgb_mux(rgbs, n);
+        rgb_mux(rgbs, led_count);
 
         if(rgb_transition(&rgbs[0], &color_to[0], INCREMENT)){
             if(++idx >= COLORS_LEN)
                 idx = 0;
-            for(int i = 0; i < n; i++){
+            for(int i = 0; i < led_count; i++){
                 color_to[i] = COLORS[(idx + i + 1) % COLORS_LEN];
             }
         }
-        for(int i = 1; i < n; i++){
+        for(int i = 1; i < led_count; i++){
             rgb_transition(&rgbs[i], &color_to[i], INCREMENT);
         }
     }
@@ -65,23 +62,18 @@ void rgb_one_chan_spectrum_fade(void *param){
 
 
 void rgb_one_chan_random_fade(void *param){
-    uint8_t n = *(int*)param;
-    
-    if(!rgb_one_chan_init(n))
-        vTaskDelete(NULL);
-    
+    const uint8_t INCREMENT = *(uint8_t*)param;
     color_t color_to[MAX_LEDS];
-    const uint8_t INCREMENT = 1;
 
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < led_count; i++){
         rgbs[i].color = COLOR_WHITE;
         color_to[i] = COLORS[esp_random() % COLORS_LEN];
     }
     
     while(1){
-        rgb_mux(rgbs, n);
+        rgb_mux(rgbs, led_count);
 
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < led_count; i++){
             if(rgb_transition(&rgbs[i], &color_to[i], INCREMENT))
                 color_to[i] = COLORS[esp_random() % COLORS_LEN];
         }
@@ -89,34 +81,29 @@ void rgb_one_chan_random_fade(void *param){
 }
 
 void rgb_one_chan_spectrum_alt_blink(void *param){
-    uint8_t n = *(uint8_t*)param;
-
-    if(!rgb_one_chan_init(n) || n < 2)
-        vTaskDelete(NULL);
-
+    const uint8_t TIME_MS = *(uint8_t*)param * 100;
     uint8_t idx = 0;
     uint8_t sw_flag = 0;
     gptimer_handle_t timer = timer_init();
-    const uint16_t TIME_MS = 250;
     
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < led_count; i++)
         rgbs[i].color = COLORS[0 + i];
 
     timer_start(timer);
 
     while(1){
-        rgb_mux(rgbs, n);
+        rgb_mux(rgbs, led_count);
         
         if(timer_passed(timer, TIME_MS)){
             timer_reset(timer);
             sw_flag = !sw_flag;
             if(++idx >= COLORS_LEN)
                 idx = 0;
-            for(int i = 0; i < n; i++)
+            for(int i = 0; i < led_count; i++)
                 rgbs[i].color = COLORS[(sw_flag + idx + i) % COLORS_LEN];
         }
         
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < led_count; i++){
             if(i % 2 == sw_flag){
                 rgb_set_color(&rgbs[i], &rgbs[i].color);
             }
