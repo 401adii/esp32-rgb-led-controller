@@ -84,7 +84,7 @@ void rgb_one_chan_random_fade(void *param){
 }
 
 void rgb_one_chan_spectrum_alt_blink(void *param){
-    const uint16_t TIME_MS = *(uint8_t*)param * 100;
+    const uint16_t TIME_MS = *(uint16_t*)param * 100;
     uint8_t idx = 0;
     uint8_t sw_flag = 0;
 
@@ -119,7 +119,7 @@ void rgb_one_chan_spectrum_alt_blink(void *param){
 }
 
 void rgb_one_chan_random_alt_blink(void *param){
-    const uint16_t TIME_MS = *(uint8_t*)param * 100;
+    const uint16_t TIME_MS = *(uint16_t*)param * 100;
     uint8_t sw_flag = 0;
 
     timer_start(timer);
@@ -145,7 +145,7 @@ void rgb_one_chan_random_alt_blink(void *param){
 }
 
 void rgb_one_chan_spectrum_ring_blink(void *param){
-    const uint16_t TIME_MS = *(uint8_t*)param * 100;
+    const uint16_t TIME_MS = *(uint16_t*)param * 100;
     uint8_t color_idx = 0;
     uint8_t led_idx = 0;
     timer_start(timer);
@@ -170,7 +170,7 @@ void rgb_one_chan_spectrum_ring_blink(void *param){
 }
 
 void rgb_one_chan_random_ring_blink(void *param){
-    const uint16_t TIME_MS = *(uint8_t*)param * 100;
+    const uint16_t TIME_MS = *(uint16_t*)param * 100;
     uint8_t led_idx = 0;
     timer_start(timer);
     while(1){
@@ -188,5 +188,28 @@ void rgb_one_chan_random_ring_blink(void *param){
             }
         }
         vTaskDelay(1 / portTICK_PERIOD_MS);
+    }
+}
+
+void rgb_one_chan_spectrum_breathe(void *param){
+    const uint8_t INCREMENT = *(uint8_t*)param;
+    uint8_t idx = 0;
+    bool flag = true;
+    for(int i = 0; i < led_count; i++)
+        rgb_enable(&rgbs[i]);
+    
+    rgb_set_color(&rgbs[0], &COLORS[idx]);
+    while(1){
+        if(flag){
+            if(rgb_transition(&rgbs[0], &COLORS[idx], INCREMENT)){
+                flag = !flag;
+                if(++idx >= COLORS_LEN)
+                    idx = 0;
+            }
+        }
+        else if(rgb_transition(&rgbs[0], &COLOR_BLACK, INCREMENT))
+            flag = !flag;
+        
+        vTaskDelay(10/portTICK_PERIOD_MS);
     }
 }
