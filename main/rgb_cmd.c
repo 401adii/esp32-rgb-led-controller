@@ -35,7 +35,6 @@ int stop_task(){
     if(current_task == NULL)  return 1;
     rgb_one_chan_deinit(led_count);
     vTaskDelete(current_task);
-    rgb_one_chan_deinit(led_count);
     current_task = NULL;
     return 0;
 }
@@ -64,7 +63,7 @@ int alt_blink_task(int argc, char **argv){
     return 0;
 }
 
-void rgb_cmd_init(){
+void rgb_cmd(){
     console_init();
     
     console_add("fade",\

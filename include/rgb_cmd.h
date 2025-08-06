@@ -21,6 +21,6 @@ int stop_task();
 int fade_task(int argc, char **argv);
 int fade_random_task(int argc, char **argv);
 int alt_blink_task(int argc, char **argv);
-void rgb_cmd_init();
+void rgb_cmd();
 
 #endif

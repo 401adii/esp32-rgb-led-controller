@@ -53,6 +53,8 @@ esp_err_t timer_deinit(gptimer_handle_t timer);
  */
 esp_err_t timer_start(gptimer_handle_t timer);
 
+esp_err_t timer_stop(gptimer_handle_t timer);
+
 /**
  * @brief Reset timer counter to zero
  * @param timer Timer handle to reset

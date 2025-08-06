@@ -17,6 +17,7 @@ gptimer_handle_t timer_init(void){
 
 esp_err_t timer_deinit(gptimer_handle_t timer){
     if(timer == NULL) return ESP_ERR_INVALID_ARG;
+    gptimer_stop(timer);
     esp_err_t ret = gptimer_disable(timer);
     if(ret != ESP_OK) return ret;
     return gptimer_del_timer(timer);
@@ -26,6 +27,10 @@ esp_err_t timer_start(gptimer_handle_t timer){
     esp_err_t ret = gptimer_enable(timer);
     if(ret != ESP_OK) return ret;
     return gptimer_start(timer);
+}
+
+esp_err_t timer_stop(gptimer_handle_t timer){
+    return gptimer_stop(timer);
 }
 
 esp_err_t timer_reset(gptimer_handle_t timer){

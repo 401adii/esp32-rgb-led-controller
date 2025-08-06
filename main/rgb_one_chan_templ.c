@@ -11,7 +11,6 @@ int rgb_one_chan_init(int n){
     const int pins[] = {PIN_1, PIN_2, PIN_3, PIN_4};
     
     led_count = n;
-    
     for(int i = 0; i < n; i++){
         rgbs[i].red_channel = RED_CHANNEL_0;
         rgbs[i].green_channel = GREEN_CHANNEL_0;
@@ -25,6 +24,9 @@ int rgb_one_chan_init(int n){
         rgb_init(&rgbs[i]);    
         rgb_disable(&rgbs[i]);
     }
+    
+    timer = timer_init();
+    
     return 0;
 }
 
@@ -32,6 +34,7 @@ void rgb_one_chan_deinit(int n){
     for(int i = 0; i < n; i++){
         rgb_deinit(&rgbs[i]);
     }
+    timer_deinit(timer);
 }
 
 void rgb_one_chan_spectrum_fade(void *param){
@@ -84,13 +87,12 @@ void rgb_one_chan_spectrum_alt_blink(void *param){
     const uint8_t TIME_MS = *(uint8_t*)param * 100;
     uint8_t idx = 0;
     uint8_t sw_flag = 0;
-    gptimer_handle_t timer = timer_init();
-    
+
     for(int i = 0; i < led_count; i++)
         rgbs[i].color = COLORS[0 + i];
 
     timer_start(timer);
-
+    
     while(1){
         rgb_mux(rgbs, led_count);
         
@@ -113,5 +115,5 @@ void rgb_one_chan_spectrum_alt_blink(void *param){
         }
         vTaskDelay(1 / portTICK_PERIOD_MS);
     }
-    
+
 }
