@@ -35,6 +35,7 @@ void rgb_one_chan_deinit(int n);
 void rgb_one_chan_spectrum_fade(void *param);
 void rgb_one_chan_random_fade(void *param);
 void rgb_one_chan_spectrum_alt_blink(void *param);
+void rgb_one_chan_random_alt_blink(void *param);
 void rgb_one_chan_spectrum_ring_blink(void *param);
 
 #endif

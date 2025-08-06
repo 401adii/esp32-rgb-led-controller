@@ -118,6 +118,32 @@ void rgb_one_chan_spectrum_alt_blink(void *param){
 
 }
 
+void rgb_one_chan_random_alt_blink(void *param){
+    const uint16_t TIME_MS = *(uint8_t*)param * 100;
+    uint8_t sw_flag = 0;
+
+    timer_start(timer);
+    
+    while(1){
+        rgb_mux(rgbs, led_count);
+        
+        if(timer_passed(timer, TIME_MS)){
+            timer_reset(timer);
+            sw_flag = !sw_flag;
+            for(int i = 0; i < led_count; i++){
+                if(i % 2 == sw_flag){
+                    rgb_set_color(&rgbs[i], &COLORS[esp_random() % COLORS_LEN]);
+                }
+                else{
+                    rgb_set_color(&rgbs[i], &COLOR_BLACK);
+                }
+            }
+        }
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+    }
+
+}
+
 void rgb_one_chan_spectrum_ring_blink(void *param){
     const uint16_t TIME_MS = *(uint8_t*)param * 100;
     uint8_t color_idx = 0;
