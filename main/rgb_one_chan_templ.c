@@ -84,7 +84,7 @@ void rgb_one_chan_random_fade(void *param){
 }
 
 void rgb_one_chan_spectrum_alt_blink(void *param){
-    const uint8_t TIME_MS = *(uint8_t*)param * 100;
+    const uint16_t TIME_MS = *(uint8_t*)param * 100;
     uint8_t idx = 0;
     uint8_t sw_flag = 0;
 
