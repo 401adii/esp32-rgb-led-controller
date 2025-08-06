@@ -41,7 +41,10 @@ void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
             break;
             
         case ESP_SPP_DATA_IND_EVT:
-            if (spp_handle != 0) {
+            if (param->data_ind.len > 0 && spp_handle != 0) {
+                int cmd_ret;
+                esp_console_run((const char*)param->data_ind.data, &cmd_ret);
+                esp_spp_write(spp_handle, param->data_ind.len, param->data_ind.data);
             }
             break;
         default:
