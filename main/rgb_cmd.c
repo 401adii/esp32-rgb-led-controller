@@ -1,6 +1,60 @@
 #include"rgb_cmd.h"
 
-int parse_led_arg(int argc, char **argv){
+void save_current_command(rgb_cmd_t cmd){
+    nvs_handle_t handle;
+    esp_err_t ret;
+
+    ret = nvs_open(NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if(ret != ESP_OK) return;
+
+    nvs_set_u8(handle, LAST_COMMAND_KEY, cmd);
+    nvs_set_u8(handle, LED_COUNT_KEY, led_count);
+    nvs_set_u16(handle, SPEED_KEY, effect_speed);
+}
+
+rgb_cmd_t load_saved_command(){
+    nvs_handle_t handle;
+    esp_err_t ret;
+    uint8_t saved_cmd = CMD_NONE;
+
+    ret = nvs_open(NVS_NAMESPACE, NVS_READONLY, &handle);
+    if(ret != ESP_OK) return CMD_NONE;
+
+    nvs_get_u8(handle, LAST_COMMAND_KEY, &saved_cmd);
+    nvs_get_u8(handle, LED_COUNT_KEY, &led_count);
+    nvs_get_u16(handle, SPEED_KEY, &effect_speed);
+
+    return (rgb_cmd_t)saved_cmd;
+}
+
+int start_command(rgb_cmd_t cmd){
+    const char *cmd_name = "";
+    TaskFunction_t task_func = NULL;
+
+    switch(cmd){
+        case CMD_FADE:
+            cmd_name = "Fade";
+            task_func = rgb_one_chan_spectrum_fade;
+            break;
+        case CMD_FADE_RANDOM:
+            cmd_name = "Fade Random";
+            task_func = rgb_one_chan_random_fade;
+            break;
+        case CMD_ALT_BLINK:
+            cmd_name = "Alt Blink";
+            task_func = rgb_one_chan_spectrum_alt_blink;
+            break;
+        default: return 1;
+        }
+        
+    if(rgb_one_chan_init(led_count)) return 1;
+        
+    xTaskCreatePinnedToCore(task_func, cmd_name, 4096, &effect_speed, 2, &current_task, 0);
+    return 0;
+}
+
+int parse_led_arg(int argc, char **argv)
+{
     struct arg_int *num_leds = arg_int0("n", "number", "<n>", "Number of LEDs (optional)");
     struct arg_int *speed = arg_int0("s", "speed", "<s>", "Speed (1-5) (optional)");
     struct arg_end *end = arg_end(20);
@@ -36,6 +90,7 @@ int stop_task(){
     rgb_one_chan_deinit(led_count);
     vTaskDelete(current_task);
     current_task = NULL;
+    save_current_command(CMD_NONE);
     return 0;
 }
 
@@ -44,6 +99,7 @@ int fade_task(int argc, char **argv){
     if(parse_led_arg(argc, argv)) return 1;
     if(rgb_one_chan_init(led_count)) return 1;
     xTaskCreatePinnedToCore(rgb_one_chan_spectrum_fade, "Fade", 4096, &effect_speed, 2, &current_task, 0);
+    save_current_command(CMD_FADE);
     return 0;
 }
 
@@ -52,6 +108,7 @@ int fade_random_task(int argc, char **argv){
     if(parse_led_arg(argc, argv)) return 1;
     if(rgb_one_chan_init(led_count)) return 1;
     xTaskCreatePinnedToCore(rgb_one_chan_random_fade, "Fade Random", 4096, &effect_speed, 2, &current_task, 0);
+    save_current_command(CMD_FADE_RANDOM);
     return 0;
 }
 
@@ -60,10 +117,25 @@ int alt_blink_task(int argc, char **argv){
     if(parse_led_arg(argc, argv)) return 1;
     if(rgb_one_chan_init(led_count)) return 1;
     xTaskCreatePinnedToCore(rgb_one_chan_spectrum_alt_blink, "Alt Blink", 4096, &effect_speed, 2, &current_task, 0);
+    save_current_command(CMD_ALT_BLINK);
     return 0;
 }
 
+void restore_last_command(){
+    rgb_cmd_t saved_cmd = load_saved_command();
+    if(saved_cmd != CMD_NONE){
+        start_command(saved_cmd);
+    }
+}
+
 void rgb_cmd(){
+
+    esp_err_t ret = nvs_flash_init();
+    if(ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND){
+        nvs_flash_erase();
+        nvs_flash_init();
+    }
+
     console_init();
     
     console_add("fade",\
@@ -82,7 +154,8 @@ void rgb_cmd(){
          "Stops current pattern\n",\
          NULL,\
          stop_task);
-    
+
+    restore_last_command();
     
     console_start();
 }

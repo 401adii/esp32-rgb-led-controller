@@ -12,6 +12,7 @@ gptimer_handle_t timer_init(void){
 
     gptimer_new_timer(&config, &timer);
 
+    gptimer_enable(timer);
     return timer;
 }
 
@@ -24,8 +25,6 @@ esp_err_t timer_deinit(gptimer_handle_t timer){
 }
 
 esp_err_t timer_start(gptimer_handle_t timer){
-    esp_err_t ret = gptimer_enable(timer);
-    if(ret != ESP_OK) return ret;
     return gptimer_start(timer);
 }
 
