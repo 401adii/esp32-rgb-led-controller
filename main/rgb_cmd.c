@@ -44,6 +44,10 @@ int start_command(rgb_cmd_t cmd){
             cmd_name = "Alt Blink";
             task_func = rgb_one_chan_spectrum_alt_blink;
             break;
+        case CMD_RING_BLINK:
+            cmd_name = "Ring Blink";
+            task_func = rgb_one_chan_spectrum_ring_blink;
+            break;
         default: return 1;
         }
         
@@ -121,6 +125,15 @@ int alt_blink_task(int argc, char **argv){
     return 0;
 }
 
+int ring_blink_task(int argc, char **argv){
+    if(current_task != NULL) return 1;
+    if(parse_led_arg(argc, argv)) return 1;
+    if(rgb_one_chan_init(led_count)) return 1;
+    xTaskCreatePinnedToCore(rgb_one_chan_spectrum_ring_blink, "Ring Blink", 4096, &effect_speed, 2, &current_task, 0);
+    save_current_command(CMD_RING_BLINK);
+    return 0;
+}
+
 void restore_last_command(){
     rgb_cmd_t saved_cmd = load_saved_command();
     if(saved_cmd != CMD_NONE){
@@ -150,6 +163,10 @@ void rgb_cmd(){
          "Enables alteranting, blinking pattern with full color spectrum",\
          "[-n|--number <n>] [-s|--speed <s>]",\
           alt_blink_task);
+    console_add("ring_blink",\
+         "Enables circular blinking pattern with full color spectrum",\
+         "[-n|--number <n>] [-s|--speed <s>]",\
+          ring_blink_task);
     console_add("stop",\
          "Stops current pattern\n",\
          NULL,\

@@ -24,6 +24,7 @@ typedef enum {
     CMD_FADE,
     CMD_FADE_RANDOM,
     CMD_ALT_BLINK,
+    CMD_RING_BLINK,
 } rgb_cmd_t;
 
 static TaskHandle_t current_task;
@@ -37,6 +38,7 @@ int stop_task();
 int fade_task(int argc, char **argv);
 int fade_random_task(int argc, char **argv);
 int alt_blink_task(int argc, char **argv);
+int ring_blink_task(int argc, char **argv);
 void restore_last_command();
 void rgb_cmd();
 
