@@ -83,6 +83,58 @@ void rgb_one_chan_random_fade(void *param){
     }
 }
 
+void rgb_one_chan_spectrum_blink(void *param){
+    const uint16_t TIME_MS = *(uint16_t*)param * 100;
+    uint8_t idx = 0;
+    bool flag = false;
+
+    for(int i = 0; i < led_count; i++){
+        rgb_enable(&rgbs[i]);
+    }
+    timer_start(timer);
+    rgbs[0].color = COLORS[idx];
+    while(1){
+        if(timer_passed(timer, TIME_MS)){
+            timer_reset(timer);
+            flag = !flag;
+            if(flag){
+                rgb_set_color(&rgbs[0], &COLORS[idx]);
+                if(++idx >= COLORS_LEN)
+                    idx = 0;
+            }
+            else
+                rgb_set_color(&rgbs[0], &COLOR_BLACK);
+        }
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+    }
+}
+
+void rgb_one_chan_random_blink(void *param){
+    const uint16_t TIME_MS = *(uint16_t*)param * 100;
+    uint8_t idx = esp_random() % COLORS_LEN;
+    bool flag = false;
+    
+    for(int i = 0; i < led_count; i++){
+        rgb_enable(&rgbs[i]);
+    }
+    
+    timer_start(timer);
+    rgbs[0].color = COLORS[idx];
+    while(1){
+        if(timer_passed(timer, TIME_MS)){
+            timer_reset(timer);
+            idx = esp_random() % COLORS_LEN;
+            flag = !flag;
+            if(flag)
+                rgb_set_color(&rgbs[0], &COLORS[idx]);
+            else
+                rgb_set_color(&rgbs[0], &COLOR_BLACK);
+        }
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+    }
+
+}
+
 void rgb_one_chan_spectrum_alt_blink(void *param){
     const uint16_t TIME_MS = *(uint16_t*)param * 100;
     uint8_t idx = 0;

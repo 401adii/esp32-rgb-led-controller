@@ -23,6 +23,8 @@ typedef enum {
     CMD_NONE,
     CMD_FADE,
     CMD_FADE_RANDOM,
+    CMD_BLINK,
+    CMD_BLINK_RANDOM,
     CMD_ALT_BLINK,
     CMD_ALT_BLINK_RANDOM,
     CMD_RING_BLINK,
@@ -41,6 +43,8 @@ int parse_led_arg(int argc, char **argv);
 int stop_task();
 int fade_task(int argc, char **argv);
 int fade_random_task(int argc, char **argv);
+int blink_task(int argc, char **argv);
+int blink_random_task(int argc, char **argv);
 int alt_blink_task(int argc, char **argv);
 int alt_blink_random_task(int argc, char **argv);
 int ring_blink_task(int argc, char **argv);

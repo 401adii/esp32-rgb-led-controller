@@ -40,6 +40,14 @@ int start_command(rgb_cmd_t cmd){
             cmd_name = "Fade Random";
             task_func = rgb_one_chan_random_fade;
             break;
+        case CMD_BLINK:
+            cmd_name = "Blink";
+            task_func = rgb_one_chan_spectrum_blink;
+            break;
+        case CMD_BLINK_RANDOM:
+            cmd_name = "Blink Random";
+            task_func = rgb_one_chan_random_blink;
+            break;
         case CMD_ALT_BLINK:
             cmd_name = "Alt Blink";
             task_func = rgb_one_chan_spectrum_alt_blink;
@@ -132,6 +140,24 @@ int fade_random_task(int argc, char **argv){
     return 0;
 }
 
+int blink_task(int argc, char **argv){
+    if(current_task != NULL) return 1;
+    if(parse_led_arg(argc, argv)) return 1;
+    if(rgb_one_chan_init(led_count)) return 1;
+    xTaskCreatePinnedToCore(rgb_one_chan_spectrum_blink, "Blink", 4096, &effect_speed, 2, &current_task, 0);
+    save_current_command(CMD_BLINK);
+    return 0;
+}
+
+int blink_random_task(int argc, char **argv){
+    if(current_task != NULL) return 1;
+    if(parse_led_arg(argc, argv)) return 1;
+    if(rgb_one_chan_init(led_count)) return 1;
+    xTaskCreatePinnedToCore(rgb_one_chan_random_blink, "Blink Random", 4096, &effect_speed, 2, &current_task, 0);
+    save_current_command(CMD_BLINK_RANDOM);
+    return 0;
+}
+
 int alt_blink_task(int argc, char **argv){
     if(current_task != NULL) return 1;
     if(parse_led_arg(argc, argv)) return 1;
@@ -211,6 +237,14 @@ void rgb_cmd(){
          "Enables fade pattern with random colors",\
          "[-n|--number <n>] [-s|--speed <s>]",\
           fade_random_task);
+    console_add("blink",\
+        "Enables blinking pattern with full spectrum colors",\
+        "[-n|--number <n>] [-s|--speed <s>]",\
+        blink_task);
+    console_add("blink_random",\
+        "Enables blinking pattern with random colors",\
+        "[-n|--number <n>] [-s|--speed <s>]",\
+        blink_random_task);
     console_add("alt_blink",\
          "Enables alteranting, blinking pattern with full color spectrum",\
          "[-n|--number <n>] [-s|--speed <s>]",\

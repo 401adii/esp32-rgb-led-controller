@@ -8,6 +8,7 @@
 #include"colors.h"
 #include"esp_random.h"
 #include"timer.h"
+#include"esp_log.h"
 
 #define PIN_1 GPIO_NUM_17
 #define PIN_2 GPIO_NUM_16
@@ -34,6 +35,8 @@ int rgb_one_chan_init(int n);
 void rgb_one_chan_deinit(int n);
 void rgb_one_chan_spectrum_fade(void *param);
 void rgb_one_chan_random_fade(void *param);
+void rgb_one_chan_spectrum_blink(void *param);
+void rgb_one_chan_random_blink(void *param);
 void rgb_one_chan_spectrum_alt_blink(void *param);
 void rgb_one_chan_random_alt_blink(void *param);
 void rgb_one_chan_spectrum_ring_blink(void *param);
