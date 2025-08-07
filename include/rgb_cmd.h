@@ -28,6 +28,7 @@ typedef enum {
     CMD_RING_BLINK,
     CMD_RING_BLINK_RANDOM,
     CMD_BREATHE,
+    CMD_BREATHE_RANDOM,
 } rgb_cmd_t;
 
 static TaskHandle_t current_task;
@@ -45,6 +46,7 @@ int alt_blink_random_task(int argc, char **argv);
 int ring_blink_task(int argc, char **argv);
 int ring_blink_random_task(int argc, char **argv);
 int breathe_task(int argc, char **argv);
+int breathe_random_task(int argc, char **argv);
 void restore_last_command();
 void rgb_cmd();
 

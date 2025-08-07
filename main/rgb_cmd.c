@@ -60,6 +60,10 @@ int start_command(rgb_cmd_t cmd){
             cmd_name = "Breathe";
             task_func = rgb_one_chan_spectrum_breathe;
             break; 
+        case CMD_BREATHE_RANDOM:
+            cmd_name = "Breathe Random";
+            task_func = rgb_one_chan_random_breathe;
+            break; 
         default: return 1;
         }
         
@@ -173,6 +177,15 @@ int breathe_task(int argc, char **argv){
     return 0;
 }
 
+int breathe_random_task(int argc, char **argv){
+    if(current_task != NULL) return 1;
+    if(parse_led_arg(argc, argv)) return 1;
+    if(rgb_one_chan_init(led_count)) return 1;
+    xTaskCreatePinnedToCore(rgb_one_chan_random_breathe, "Breathe Random", 4096, &effect_speed, 2, &current_task, 0);
+    save_current_command(CMD_BREATHE_RANDOM);
+    return 0;
+}
+
 void restore_last_command(){
     rgb_cmd_t saved_cmd = load_saved_command();
     if(saved_cmd != CMD_NONE){
@@ -218,6 +231,10 @@ void rgb_cmd(){
          "Enables breathing pattern with full color spectrum",\
          "[-n|--number <n>] [-s|--speed <s>]",\
           breathe_task);
+    console_add("breathe_random",\
+         "Enables breathing pattern with random colors",\
+         "[-n|--number <n>] [-s|--speed <s>]",\
+          breathe_random_task);
     console_add("stop",\
          "Stops current pattern\n",\
          NULL,\

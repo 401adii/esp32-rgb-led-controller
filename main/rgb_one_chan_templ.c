@@ -213,3 +213,25 @@ void rgb_one_chan_spectrum_breathe(void *param){
         vTaskDelay(10/portTICK_PERIOD_MS);
     }
 }
+
+void rgb_one_chan_random_breathe(void *param){
+    const uint8_t INCREMENT = *(uint8_t*)param;
+    color_t color_to = COLORS[esp_random() % COLORS_LEN];
+    bool flag = true;
+    for(int i = 0; i < led_count; i++)
+        rgb_enable(&rgbs[i]);
+    
+    rgb_set_color(&rgbs[0], &color_to);
+    while(1){
+        if(flag){
+            if(rgb_transition(&rgbs[0], &color_to, INCREMENT)){
+                flag = !flag;
+                color_to = COLORS[esp_random() % COLORS_LEN];
+            }
+        }
+        else if(rgb_transition(&rgbs[0], &COLOR_BLACK, INCREMENT))
+            flag = !flag;
+        
+        vTaskDelay(10/portTICK_PERIOD_MS);
+    }
+}
